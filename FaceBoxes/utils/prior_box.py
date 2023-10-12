@@ -1,19 +1,19 @@
-# coding: utf-8
-
-from .config import cfg
-
-import torch
 from itertools import product as product
 from math import ceil
 
+import numpy as np
+import torch
+
+from .config import cfg
+
 
 class PriorBox(object):
-    def __init__(self, image_size=None):
+    def __init__(self, image_size=None, phase="train"):
         super(PriorBox, self).__init__()
         # self.aspect_ratios = cfg['aspect_ratios']
-        self.min_sizes = cfg['min_sizes']
-        self.steps = cfg['steps']
-        self.clip = cfg['clip']
+        self.min_sizes = cfg["min_sizes"]
+        self.steps = cfg["steps"]
+        self.clip = cfg["clip"]
         self.image_size = image_size
         self.feature_maps = [[ceil(self.image_size[0] / step), ceil(self.image_size[1] / step)] for step in self.steps]
 
@@ -26,10 +26,12 @@ class PriorBox(object):
                     s_kx = min_size / self.image_size[1]
                     s_ky = min_size / self.image_size[0]
                     if min_size == 32:
-                        dense_cx = [x * self.steps[k] / self.image_size[1] for x in
-                                    [j + 0, j + 0.25, j + 0.5, j + 0.75]]
-                        dense_cy = [y * self.steps[k] / self.image_size[0] for y in
-                                    [i + 0, i + 0.25, i + 0.5, i + 0.75]]
+                        dense_cx = [
+                            x * self.steps[k] / self.image_size[1] for x in [j + 0, j + 0.25, j + 0.5, j + 0.75]
+                        ]
+                        dense_cy = [
+                            y * self.steps[k] / self.image_size[0] for y in [i + 0, i + 0.25, i + 0.5, i + 0.75]
+                        ]
                         for cy, cx in product(dense_cy, dense_cx):
                             anchors += [cx, cy, s_kx, s_ky]
                     elif min_size == 64:

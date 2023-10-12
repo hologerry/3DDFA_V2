@@ -1,5 +1,5 @@
 cd FaceBoxes
-sh ./build_cpu_nms.sh
+sh ./make.sh
 cd ..
 
 cd Sim3DR
