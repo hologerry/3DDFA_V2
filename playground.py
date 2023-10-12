@@ -27,7 +27,9 @@ max_x = max(np.abs(norm_points[0, left_ear_idx]), np.abs(norm_points[0, right_ea
 print(max_x)
 norm_points = norm_points / max_x
 
-back_poinst = norm_points * max_x 
+back_points = norm_points * max_x
+back_points = back_points + new_points[:, nose_idx].reshape(3, 1)
+back_points = np.dot(np.linalg.inv(rot_mat), back_points)
 
 
 img = cv2.imread("vfhq_sq_img.png")
@@ -70,7 +72,6 @@ for ind in range(len(nums) - 1):
     )
 
 plt.savefig("playground_tmp/raw_points.png")
-
 plt.close()
 
 
@@ -105,3 +106,36 @@ plt.gca().invert_yaxis()
 plt.savefig("playground_tmp/front_points.png")
 plt.close()
 
+plt.figure(figsize=(12, height / width * 12))
+plt.imshow(img[..., ::-1])
+plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
+
+plot_close = lambda i1, i2: plt.plot(
+    [back_points[0, i1], back_points[0, i2]],
+    [back_points[1, i1], back_points[1, i2]],
+    color=color,
+    lw=lw,
+    alpha=alpha - 0.1,
+)
+plot_close(41, 36)
+plot_close(47, 42)
+plot_close(59, 48)
+plot_close(67, 60)
+
+for ind in range(len(nums) - 1):
+    l, r = nums[ind], nums[ind + 1]
+    plt.plot(back_points[0, l:r], back_points[1, l:r], color=color, lw=lw, alpha=alpha - 0.1)
+
+    plt.plot(
+        back_points[0, l:r],
+        back_points[1, l:r],
+        marker="o",
+        linestyle="None",
+        markersize=markersize,
+        color=color,
+        markeredgecolor=markeredgecolor,
+        alpha=alpha,
+    )
+
+plt.savefig("playground_tmp/back_points.png")
+plt.close()

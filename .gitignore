@@ -18,7 +18,7 @@ websmooth.py
 demo_webcam.py
 
 examples/inputs/spoof/
-weights/*.onnx
+weights/*.onnxgit rm --cached
 configs/ncc_code_53215.npy
 pr.*
 *.docx
@@ -32,3 +32,5 @@ test_pr*.py
 demo_for_*.py
 examples/**/zou*
 examples/inputs/videos
+
+playground_tmp
