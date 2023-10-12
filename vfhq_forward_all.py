@@ -72,8 +72,15 @@ def main(args):
                 n = len(boxes)
                 if n == 0:
                     print(f"{frame_path} No face detected, exit")
+                    continue
 
                 param_lst, roi_box_lst = tddfa(img, boxes)
+                if len(param_lst) == 0:
+                    print(f"{frame_path} No face detected, exit")
+                    continue
+                if len(roi_box_lst) == 0:
+                    print(f"{frame_path} No face detected, exit")
+                    continue
                 ver_lst = tddfa.recon_vers(param_lst, roi_box_lst, dense_flag=False)
                 pts_out_path = os.path.join(
                     landmark_output_dir, video_name, clip_name, frame_name.replace(".png", "_pts.npy")
